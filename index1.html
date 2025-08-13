@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Focus Garden</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(to bottom, #e0f7fa, #fff3e0);
+    min-height: 100vh;
+  }
+  h1 { margin-top: 20px; }
+  #garden {
+    width: 200px;
+    height: 200px;
+    background: #c8e6c9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    position: relative;
+  }
+  .plant {
+    width: 50px;
+    height: 50px;
+    background: green;
+    border-radius: 0 0 25px 25px;
+    position: absolute;
+    bottom: 40px;
+  }
+  #timer {
+    font-size: 2em;
+    margin: 10px 0;
+  }
+  button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+  }
+  button:hover { background-color: #45a049; }
+</style>
+</head>
+<body>
+  <h1>🌱 Focus Garden</h1>
+  <div id="garden"></div>
+  <div id="timer">25:00</div>
+  <button id="start">Start Focus</button>
+  <button id="reset">Reset</button>
+  <p>Complete Pomodoros to grow your garden!</p>
+
+<script>
+  let time = 25 * 60;
+  let timerInterval;
+  let plants = 0;
+
+  const garden = document.getElementById('garden');
+  const timerDisplay = document.getElementById('timer');
+
+  function updateTimerDisplay() {
+    let minutes = Math.floor(time / 60);
+    let seconds = time % 60;
+    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  function growPlant() {
+    const plant = document.createElement('div');
+    plant.classList.add('plant');
+    plant.style.left = `${Math.random() * 150 + 25}px`;
+    garden.appendChild(plant);
+  }
+
+  document.getElementById('start').addEventListener('click', () => {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      if (time > 0) {
+        time--;
+        updateTimerDisplay();
+      } else {
+        clearInterval(timerInterval);
+        plants++;
+        growPlant();
+        time = 25 * 60;
+        updateTimerDisplay();
+      }
+    }, 1000);
+  });
+
+  document.getElementById('reset').addEventListener('click', () => {
+    clearInterval(timerInterval);
+    time = 25 * 60;
+    updateTimerDisplay();
+  });
+
+  updateTimerDisplay();
+</script>
+</body>
+</html>
